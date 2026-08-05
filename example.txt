@@ -1,0 +1,18 @@
+============== JSON Format ==============
+
+{
+    "name": "Aditya",
+    "age": 31,
+    "langauages": ["English", "Hindi, "Marathi", "Kannada", "Tulu"]
+}
+
+============== YAML Format ==============
+
+name: Aditya
+age: 31,
+languages:
+  - English
+  - Hindi
+  - Marathi
+  - Kannada
+  - Tulu

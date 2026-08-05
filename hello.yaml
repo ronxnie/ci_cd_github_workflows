@@ -1,0 +1,53 @@
+# This is a sample YAML file containing personal information.
+
+name: Aditya
+age: 31
+languages:
+  - English
+  - Hindi
+  - Marathi
+  - Kannada
+  - Tulu
+
+
+person:
+  - name: aditya
+    address:
+      city: Pune
+      pincode: 412101
+    phone:
+      - type: mobile
+        number: 1234567890
+      - type: home
+        number: 0987654321
+  - name: Anusha
+    address:
+      city: Pune
+      pincode: 412101
+    phone:
+      - type: mobile
+        number: 9876543210
+      - type: home
+        number: 0123456789
+  - name: Ananya
+    address:
+      city: Mumbai
+      pincode: 400001
+    phone:
+      - type: mobile
+        number: 5678901234
+      - type: home
+        number: 4321098765
+
+script: |
+  echo "Hello, World!"
+  echo "This is a sample script in YAML format."
+  echo "YAML is a human-readable data serialization format."
+
+run: |
+  cd /home/user
+  ls -l
+  pwd
+  echo "Current directory: $(pwd)"
+
+
