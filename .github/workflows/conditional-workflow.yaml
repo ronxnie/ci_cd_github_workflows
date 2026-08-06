@@ -1,0 +1,39 @@
+name: conditional-workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      simulation:
+        description: 'Simulate a failure in the workflow'
+        type: boolean
+        required: false
+        default: false
+      target-branch:
+        description: 'The target branch for the workflow'
+        type: string
+        required: true
+        default: main
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  Conditional-Demo:
+    name: Conditional-steps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Always Run
+        run: echo "This step always runs."
+
+      - name: Conditional Step run only on main branch
+        if: github.ref == 'refs/heads/main'
+        run: echo "This step runs only on the main branch."
+        
+  
+          
+        
