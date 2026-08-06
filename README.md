@@ -11,22 +11,60 @@ This repository contains a sample project for learning and demonstrating GitHub 
 ## Contents
 
 - `.github/workflows/` - Workflow definitions for GitHub Actions
+- `.github/workflows/test-workflow.yaml` - A basic workflow that demonstrates a simple CI job
+- `.github/workflows/conditional-workflow.yaml` - A multi-conditional workflow showing how steps can run based on branch and event conditions
+- `.github/workflows/multi-job.yaml` - A multi-job workflow that runs several jobs and uses a failure-based condition
+- `hello.yaml` - A sample YAML file showing structured data and shell script examples
+- `example.txt` - A simple text file used as a placeholder/example file
 - `README.md` - Project overview and usage notes
 
 ## Workflow File Details
 
-The file `.github/workflows/test-workflow.yaml` is a sample GitHub Actions workflow used to demonstrate automation.
+### 1. `test-workflow.yaml`
 
-### What this workflow does
+The file `.github/workflows/test-workflow.yaml` is a simple GitHub Actions workflow used to demonstrate automation.
 
 - It is named `test-workflow`.
 - It runs when the workflow is manually triggered using `workflow_dispatch` and when changes are pushed to the `main` branch.
 - It defines a job called `test-job` that runs on `ubuntu-latest`.
 - The job checks out the repository and runs a few example shell commands to simulate a test step.
 
-### Why it is placed in `.github/workflows`
+### 2. `conditional-workflow.yaml`
 
-GitHub Actions looks for workflow definition files in the `.github/workflows` folder. Placing the file there ensures that GitHub recognizes it automatically and can run it based on the configured triggers.
+The file `.github/workflows/conditional-workflow.yaml` demonstrates a multi-conditional workflow.
+
+- It can be triggered manually with `workflow_dispatch` and on pushes to `main` or `develop`.
+- It contains several steps that use `if` conditions to decide whether they should run.
+- One step runs only on the `main` branch, another only on non-main branches, and others run only for certain event types.
+- This is useful for showing how a workflow can behave differently depending on the branch, event, or input values.
+
+### 3. `multi-job.yaml`
+
+The file `.github/workflows/multi-job.yaml` demonstrates a multi-job workflow.
+
+- It defines multiple jobs: `job1`, `job2`, and `job3`.
+- `job1` and `job2` run independently on `ubuntu-latest`.
+- `job3` uses the condition `if: failure()` so it runs only when a previous job has failed.
+- This example shows how GitHub Actions can split work into separate jobs and manage dependencies or failure handling.
+
+### 4. `hello.yaml`
+
+The file `hello.yaml` is a sample YAML document used for practicing YAML syntax.
+
+- It includes personal information in a structured format.
+- It shows how nested objects and lists can be represented in YAML.
+- It also contains example `script` and `run` blocks that demonstrate shell commands.
+
+### 5. `example.txt`
+
+The file `example.txt` is a simple text example file in the repository.
+
+- It can be used as a placeholder or as a basic example for learning file handling.
+- It is not a workflow file, but it helps keep the repository organized with sample content.
+
+### Why workflow files are placed in `.github/workflows`
+
+GitHub Actions looks for workflow definition files in the `.github/workflows` folder. Placing the files there ensures that GitHub recognizes them automatically and can run them based on the configured triggers.
 
 ## Usage
 
