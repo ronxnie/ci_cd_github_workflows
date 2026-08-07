@@ -280,6 +280,74 @@ A GitHub Actions workflow YAML file defines when and how automation should run. 
 - `runs-on`: Selects the runner environment. For example, `ubuntu-latest` uses a GitHub-hosted Ubuntu machine.
 - `steps`: Lists the actions or shell commands that should run inside the job.
 
+### Installing Python
+
+Python is often used in CI/CD pipelines for scripts, automation, and testing. To use Python in GitHub Actions, it is helpful to install it on your local machine first.
+
+#### On Windows
+
+1. Download Python from the official Python website.
+2. Run the installer and check the option to add Python to `PATH`.
+3. Verify the installation:
+
+```bash
+python --version
+pip --version
+```
+
+#### On Ubuntu / WSL
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+python3 --version
+pip3 --version
+```
+
+#### Additional Points
+
+- Use a virtual environment for project-specific dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+- On Windows, activate the virtual environment with:
+
+```bash
+.venv\Scripts\activate
+```
+
+- Install packages with `pip` when needed:
+
+```bash
+pip install requests
+```
+
+### GitHub Marketplace
+
+GitHub Marketplace is a place where developers can discover and use reusable GitHub Actions, apps, and automation tools created by the community and official vendors.
+
+- It helps you add features like testing, deployment, notifications, and code quality checks quickly.
+- You can browse actions by category and install them in your repository.
+- Popular examples include actions for checkout, Node.js setup, Python setup, Docker, and deployment.
+
+### Differences in Versions
+
+When working with GitHub Actions, you may see versions such as `v4`, `v5`, or `v6` in action references.
+
+- A major version like `@v4` usually points to the latest compatible release within that major line.
+- A more specific version such as `@v4.1.0` or `@v6.1.2` is more precise and may include bug fixes or new features.
+- It is good practice to use a stable version pin to avoid unexpected changes in behavior.
+
+Example:
+
+```yaml
+steps:
+  - uses: actions/checkout@v6
+```
+
 ### When `runs-on` is set to `ubuntu-latest`
 
 If `runs-on: ubuntu-latest` is used, GitHub Actions will execute the workflow on a GitHub-hosted Ubuntu runner. This is useful when you want a ready-to-use environment without managing your own machine.
