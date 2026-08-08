@@ -53,3 +53,4 @@ jobs:
           python --version
           pip --version
           echo "Repository: ${{ vars.REPOSITORY }}"
+          echo "REPOSITORY_SECRET: ${{ secrets.MY_SECRET_KEYWORD }}"
