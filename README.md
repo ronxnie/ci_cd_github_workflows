@@ -15,6 +15,7 @@ This repository contains a sample project for learning and demonstrating GitHub 
 - `.github/workflows/conditional-workflow.yaml` - A multi-conditional workflow showing how steps can run based on branch and event conditions
 - `.github/workflows/multi-job.yaml` - A multi-job workflow that runs several jobs and uses a failure-based condition
 - `.github/workflows/environment_variable_git_variables_git_secret.yaml` - A workflow that demonstrates workflow-level environment variables, GitHub context variables, and the use of repository-level configuration values
+- `.github/workflows/aws-authentication-using-iam-workflow.yml` - A workflow that demonstrates AWS authentication using IAM credentials stored as GitHub repository secrets
 - `hello.yaml` - A sample YAML file showing structured data and shell script examples
 - `example.txt` - A simple text file used as a placeholder/example file
 - `README.md` - Project overview and usage notes
@@ -58,7 +59,20 @@ The file `.github/workflows/environment_variable_git_variables_git_secret.yaml` 
 - It demonstrates built-in GitHub context values such as `${{ var.REPOSITORY }}`, `${{ var.REF }}`, `${{ var.SHA }}`, `${{ var.GITHUB_ACTOR }}`, and `${{ var.EVENT_NAME }}`.
 - This workflow is a useful example for learning how configuration can be shared across jobs and how GitHub exposes repository and event metadata.
 
-### 5. `hello.yaml`
+### 5. `aws-authentication-using-iam-workflow.yml`
+
+The file `.github/workflows/aws-authentication-using-iam-workflow.yml` demonstrates how to authenticate to AWS using IAM credentials from GitHub repository secrets.
+
+- It is triggered manually using `workflow_dispatch`.
+- It checks out the repository code using `actions/checkout@v7`.
+- It configures AWS credentials with `aws-actions/configure-aws-credentials@v6`.
+- It uses the repository secrets `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for authentication.
+- It sets the AWS region to `us-east-1`.
+- It verifies the authentication with `aws sts get-caller-identity` and lists S3 buckets with `aws s3 ls`.
+
+This workflow is useful for learning how CI/CD pipelines can securely connect to AWS services without hard-coding credentials in the workflow file.
+
+### 6. `hello.yaml`
 
 The file `hello.yaml` is a sample YAML document used for practicing YAML syntax.
 
@@ -66,7 +80,7 @@ The file `hello.yaml` is a sample YAML document used for practicing YAML syntax.
 - It shows how nested objects and lists can be represented in YAML.
 - It also contains example `script` and `run` blocks that demonstrate shell commands.
 
-### 6. `example.txt`
+### 7. `example.txt`
 
 The file `example.txt` is a simple text example file in the repository.
 
@@ -117,6 +131,92 @@ env:
 ```
 
 > Repository variables are good for non-sensitive values, while secrets are meant for sensitive information such as passwords, tokens, or API keys.
+
+## Repository-Wide Secret Keys in GitHub Actions
+
+GitHub repository secrets are encrypted values that are stored at the repository level and made available to workflows when needed. They are maintained under:
+
+- Repository Settings
+- Secrets and variables
+- Actions
+- Secrets
+
+These secrets are especially useful when a workflow needs to connect to external systems without hard-coding sensitive information directly into the YAML file.
+
+### What Repository Secrets Are
+
+Repository secrets are protected key-value pairs such as:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+- `DEPLOYMENT_TOKEN`
+- `SSH_PRIVATE_KEY`
+- `SLACK_WEBHOOK_URL`
+- `NPM_TOKEN`
+
+They are stored securely by GitHub and can only be accessed by workflows that are authorized to use them.
+
+### How to Create Repository Secrets
+
+1. Open the GitHub repository.
+2. Go to Settings.
+3. Open Secrets and variables -> Actions.
+4. Click Secrets.
+5. Select New repository secret.
+6. Enter a secret name and its value.
+7. Click Add secret.
+
+Example:
+
+- Name: `DEPLOYMENT_TOKEN`
+- Value: `abc123xyz789`
+
+### How Secrets Are Used in Workflows
+
+Secrets are accessed in a workflow using the `secrets` context:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use deployment token
+        run: echo "Deploying with token"
+        env:
+          DEPLOYMENT_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
+```
+
+This is the standard way to inject sensitive data into jobs without exposing it in source code.
+
+### How This Feature Is Used Every Day
+
+In real-world DevOps and CI/CD pipelines, repository secrets are used every day for common tasks such as:
+
+- Deploying applications to cloud platforms like AWS, Azure, or Google Cloud
+- Logging in to Docker Hub or container registries
+- Authenticating to package managers such as npm, PyPI, or Maven
+- Sending build notifications to Slack, Teams, or email services
+- Accessing APIs and third-party services during automated tests or releases
+- Connecting to SSH-based deployment servers
+
+For example, a deployment workflow may use a secret to authenticate to a remote server, while a release workflow may use a secret to publish a package to a registry.
+
+### Best Practices for Secrets
+
+- Never hard-code secrets in YAML files or source code
+- Use descriptive names such as `AWS_SECRET_ACCESS_KEY` or `DOCKERHUB_TOKEN`
+- Rotate secrets regularly
+- Give access only to the workflows and environments that truly need them
+- Prefer environment-scoped secrets when a secret should be available only for specific environments
+
+### Difference Between Variables and Secrets
+
+- Variables are used for non-sensitive configuration values such as `APP_NAME` or `ENVIRONMENT`
+- Secrets are used for sensitive values such as passwords, tokens, or private keys
+
+This separation helps keep workflows secure and easier to manage.
 
 ## Usage
 
