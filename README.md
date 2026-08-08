@@ -14,6 +14,7 @@ This repository contains a sample project for learning and demonstrating GitHub 
 - `.github/workflows/test-workflow.yaml` - A basic workflow that demonstrates a simple CI job
 - `.github/workflows/conditional-workflow.yaml` - A multi-conditional workflow showing how steps can run based on branch and event conditions
 - `.github/workflows/multi-job.yaml` - A multi-job workflow that runs several jobs and uses a failure-based condition
+- `.github/workflows/environment_variable_git_variables_git_secret.yaml` - A workflow that demonstrates workflow-level environment variables, GitHub context variables, and the use of repository-level configuration values
 - `hello.yaml` - A sample YAML file showing structured data and shell script examples
 - `example.txt` - A simple text file used as a placeholder/example file
 - `README.md` - Project overview and usage notes
@@ -47,7 +48,17 @@ The file `.github/workflows/multi-job.yaml` demonstrates a multi-job workflow.
 - `job3` uses the condition `if: failure()` so it runs only when a previous job has failed.
 - This example shows how GitHub Actions can split work into separate jobs and manage dependencies or failure handling.
 
-### 4. `hello.yaml`
+### 4. `environment_variable_git_variables_git_secret.yaml`
+
+The file `.github/workflows/environment_variable_git_variables_git_secret.yaml` shows how to work with environment variables and GitHub context values inside a workflow.
+
+- It defines workflow-level variables such as `APP_VERSION`, `APP_NAME`, and `ENVIRONMENT` under the top-level `env` section.
+- It also sets a job-level environment variable named `APP_CLASS` for one job.
+- It prints values using the `${{ env.VAR_NAME }}` syntax to access environment variables.
+- It demonstrates built-in GitHub context values such as `${{ var.REPOSITORY }}`, `${{ var.REF }}`, `${{ var.SHA }}`, `${{ var.GITHUB_ACTOR }}`, and `${{ var.EVENT_NAME }}`.
+- This workflow is a useful example for learning how configuration can be shared across jobs and how GitHub exposes repository and event metadata.
+
+### 5. `hello.yaml`
 
 The file `hello.yaml` is a sample YAML document used for practicing YAML syntax.
 
@@ -55,7 +66,7 @@ The file `hello.yaml` is a sample YAML document used for practicing YAML syntax.
 - It shows how nested objects and lists can be represented in YAML.
 - It also contains example `script` and `run` blocks that demonstrate shell commands.
 
-### 5. `example.txt`
+### 6. `example.txt`
 
 The file `example.txt` is a simple text example file in the repository.
 
@@ -65,6 +76,47 @@ The file `example.txt` is a simple text example file in the repository.
 ### Why workflow files are placed in `.github/workflows`
 
 GitHub Actions looks for workflow definition files in the `.github/workflows` folder. Placing the files there ensures that GitHub recognizes them automatically and can run them based on the configured triggers.
+
+## Repository-Level Variables and Secrets
+
+You can create variables and secrets for the whole repository so they are available to all workflows.
+
+### Create Repository Variables
+
+1. Open your repository on GitHub.
+2. Go to Settings > Secrets and variables > Actions.
+3. Click the Variables tab.
+4. Choose New repository variable.
+5. Enter a name and value, for example:
+   - `APP_NAME=my-app`
+   - `APP_VERSION=1.0.0`
+   - `ENVIRONMENT=production`
+6. Save the variable.
+
+Use repository variables in a workflow with the `vars` context:
+
+```yaml
+run: echo "App Name: ${{ vars.APP_NAME }}"
+```
+
+### Create Repository Secrets
+
+1. Open your repository on GitHub.
+2. Go to Settings > Secrets and variables > Actions.
+3. Click the Secrets tab.
+4. Choose New repository secret.
+5. Enter a secret name and value.
+6. Save the secret.
+
+Use repository secrets in a workflow with the `secrets` context:
+
+```yaml
+run: echo "My secret is available"
+env:
+  MY_SECRET: ${{ secrets.MY_SECRET }}
+```
+
+> Repository variables are good for non-sensitive values, while secrets are meant for sensitive information such as passwords, tokens, or API keys.
 
 ## Usage
 
